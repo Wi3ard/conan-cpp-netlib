@@ -9,14 +9,14 @@ class cppnetlibConan(ConanFile):
     url="https://github.com/Wi3ard/conan-cpp-netlib"
     generators = "cmake", "txt"
     settings = "os", "compiler", "build_type", "arch"
-    requires = "Boost/1.60.0@lasote/stable";
+    requires = "Boost/1.60.0@lasote/stable", "OpenSSL/1.0.2i@lasote/stable";
 
     options = {"shared": [True, False],
                "enable_https": [True, False],
                "enable_tests": [True, False],
                "enable_examples": [True, False]}
     default_options = "shared=False", \
-        "enable_https=False", \
+        "enable_https=True", \
         "enable_tests=False", \
         "enable_examples=False", \
         "Boost:shared=False"
@@ -25,9 +25,12 @@ class cppnetlibConan(ConanFile):
         self.run("git clone --recursive https://github.com/cpp-netlib/cpp-netlib.git")
         self.run("cd cpp-netlib && git checkout 0.13-release")
 
-    def config(self):
-        if self.options.enable_https:
-            self.requires.add("OpenSSL/1.0.2i@lasote/stable", private=False)
+#    def config(self):
+#        if self.settings.os == "Windows":
+#            if self.options.enable_https:
+#                self.requires.add("OpenSSL/1.0.2i@lasote/stable", private=False)
+#        else:
+#            self.requires.add("OpenSSL/1.0.2i@lasote/stable", private=False)
 
     def build(self):
         conan_magic_lines = '''include(GNUInstallDirs)
