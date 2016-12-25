@@ -25,13 +25,6 @@ class cppnetlibConan(ConanFile):
         self.run("git clone --recursive https://github.com/cpp-netlib/cpp-netlib.git")
         self.run("cd cpp-netlib && git checkout 0.13-release")
 
-#    def config(self):
-#        if self.settings.os == "Windows":
-#            if self.options.enable_https:
-#                self.requires.add("OpenSSL/1.0.2i@lasote/stable", private=False)
-#        else:
-#            self.requires.add("OpenSSL/1.0.2i@lasote/stable", private=False)
-
     def build(self):
         conan_magic_lines = '''include(GNUInstallDirs)
 
@@ -58,11 +51,6 @@ if(MSVC AND CONAN_LINK_RUNTIME)
 endif()
     '''
         replace_in_file("cpp-netlib/CMakeLists.txt", "include(GNUInstallDirs)", conan_magic_lines)
-
-        conan_magic_lines = '''if (OPENSSL_FOUND)
-message("**************************************************************")
-    '''
-        replace_in_file("cpp-netlib/CMakeLists.txt", "if (OPENSSL_FOUND)", conan_magic_lines)
 
         replace_in_file("cpp-netlib/CMakeLists.txt",
                         "file(RELATIVE_PATH REL_INCLUDE_DIR \"${INSTALL_CMAKE_DIR}\"",
